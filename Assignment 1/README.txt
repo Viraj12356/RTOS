@@ -13,5 +13,15 @@ Clients
 100     -   104.41422462463379
 
 
-No of       No.of parallel  Time Taken
+No of       No.of parallel Time Taken(ms)
 Clients     users
+10	           2            109
+20             2            111
+30             2            115
+40             2            117
+50             2            121
+60             2            122
+70             2            129
+80             2            130
+90             2            133
+100            2            136
