@@ -7,7 +7,6 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
-#include <time.h> 
 #include <pthread.h>
 #define PORT 8888
 struct clients
@@ -22,7 +21,6 @@ void *connection_handler(void *socket_desc)
 {
     //Get the socket descriptor
     int i,j;
-    clock_t t; 
     struct clients cl1 = *((struct clients *)socket_desc);
 
     int read_size;
@@ -33,7 +31,6 @@ void *connection_handler(void *socket_desc)
     {
 	printf("%s\n",client_message);       
 	//Send message to  all remaining clients in group 
-    	t = clock(); 
 	for(i=0;i<n;i++)
 	{
 	   if(client_index[i]!=cl1.id)
@@ -43,10 +40,6 @@ void *connection_handler(void *socket_desc)
         	//printf("%s\n",client_message);
 	   }
 	}
-	t = clock() - t; 
-    	double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds 
-  
-    	printf("fun() took %f seconds to execute \n", time_taken); 
 	for(int i=0;i<2000;i++)
 	{
 	  client_message[i]=0;	
