@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <time.h> 
 #include <pthread.h>
-
+#define PORT 8888
 struct clients
  {
     int id;
@@ -57,17 +57,18 @@ void *connection_handler(void *socket_desc)
     {
         puts("Client disconnected");
         fflush(stdout);
-    }
+    
     for(i = 0; i < n; i++) {
-		if(clients[i] == cl.sockno) {
+		if(client_index[i] == cl.id) {
 			j = i;
 			while(j < n-1) {
-				clients[j] = clients[j+1];
+				client_index[j] = client_index[j+1];
 				j++;
 			}
 		}
 	}
 	n--;
+    }
     else if(read_size == -1)
     {
         perror("recv failed");
@@ -80,6 +81,7 @@ int main(int argc, char *argv[])
 {
     int socket_desc ,client_sock, c , *new_sock,i;
     pthread_t sendt,recvt;
+    int opt=1;
     struct sockaddr_in serv_addr,client;
     int addrlen = sizeof(struct sockaddr_in );
     //Create socket
@@ -88,11 +90,16 @@ int main(int argc, char *argv[])
     {
         printf("Could not create socket");
     }
+	
     puts("Socket created");
+if (setsockopt(socket_desc, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,&opt, sizeof(opt))){
+		perror("setsockopt");
+		exit(EXIT_FAILURE);
+	}
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.43.249");
-    serv_addr.sin_port = htons(5000); 
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_port = htons(PORT); 
 
     bind(socket_desc, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
    
