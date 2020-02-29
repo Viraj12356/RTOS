@@ -57,6 +57,7 @@ int main(int argc, char const *argv[])
 		printf("\nConnection Failed \n"); 
 		return -1; 
 	}
+	printf("connected");
 	signal(SIGINT, sigintHandler); 
 	pthread_create(&recvt,NULL,recvmg,&sock);
 	while(1){
